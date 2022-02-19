@@ -1,7 +1,6 @@
 //Dependencies
 const express = require('express')
 const { json } = require('express/lib/response')
-const { events } = require('../models/comment.js')
 const comment = express.Router()
 const Comment = require('../models/comment.js')
 
@@ -15,24 +14,11 @@ comment.get('/', async (req, res) => {
     }
 })
 
-// //Show
-// comment.get('/:id', (req, res) => {
-//     Comment.findById(req.params.id)
-//         .populate({
-//             path: 'comments',
-//             options: { limit: 5 }
-//         })
-//         .then(foundComment => {
-//             res.render('commentShow', {
-//                 comment: foundComment
-//             })
-//         })
-// })
-
 //Create
 comment.post('/', async (req, res) => {
     try {
-        Comment.create(req.body)
+        await Comment.create(req.body)
+        res.status(200).json({ message: "Comment added" })
     } catch (err) {
         res.status(500).json(err)
     }
