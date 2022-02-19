@@ -1,0 +1,57 @@
+const { append } = require('express/lib/response')
+const Post =require("../models/post")
+const { post } = require('./comment_controller')
+const posts = require('express').Router()
+
+// GET
+posts.get('/', async (req, res) => {
+   try {
+      const foundPosts =  await Post.find()
+      res.status(200).json(foundPosts)
+   } catch (err){
+      res.status(500).json(err)
+   }
+})
+
+// // POST
+posts.post('/', async (req, res) => {
+   try {
+      await Post.create(req.body)
+      res.status(200).json({message: 'POST CREATED'})
+   } catch (err){
+      res.status(500).json(err)
+   }
+})
+
+// SHOW
+posts.get('/:id', async (req, res) => {
+   try {
+      const foundPost = await Post.findById(req.params.id)
+         .populate({path: "comments"})
+         res.status(200).json(foundPost)
+   } catch (err){
+      res.status(500).json(err)
+   }
+})
+
+// UPDATE
+posts.put('/:id', async (req, res) => {
+   try {
+      await Post.findByIdAndUpdate(req.params.id, req.body)
+      res.status(200).json({message: 'UPDATED'})
+   } catch (err){
+      res.status(500).json(err)
+   }
+})
+
+// // DELETE
+posts.delete('/:id', async (req, res) => {
+   try {
+      await Post.findByIdAndDelete(req.params.id)
+      res.status(200).json({message: 'DELETED'})
+   } catch (err){
+      res.status(500).json(err)
+   }
+})
+
+module.exports = posts
