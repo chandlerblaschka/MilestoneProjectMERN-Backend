@@ -1,14 +1,14 @@
 const { append } = require('express/lib/response')
-const Post =require("../models/post")
+const Post = require("../models/post")
 const { post } = require('./comment_controller')
 const posts = require('express').Router()
 
 // GET
 posts.get('/', async (req, res) => {
    try {
-      const foundPosts =  await Post.find()
+      const foundPosts = await Post.find().sort({ post_date: -1 })
       res.status(200).json(foundPosts)
-   } catch (err){
+   } catch (err) {
       res.status(500).json(err)
    }
 })
@@ -17,8 +17,8 @@ posts.get('/', async (req, res) => {
 posts.post('/', async (req, res) => {
    try {
       await Post.create(req.body)
-      res.status(200).json({message: 'POST CREATED'})
-   } catch (err){
+      res.status(200).json({ message: 'POST CREATED' })
+   } catch (err) {
       res.status(500).json(err)
    }
 })
@@ -27,9 +27,9 @@ posts.post('/', async (req, res) => {
 posts.get('/:id', async (req, res) => {
    try {
       const foundPost = await Post.findById(req.params.id)
-         .populate({path: "comments"})
-         res.status(200).json(foundPost)
-   } catch (err){
+         .populate({ path: "comments" })
+      res.status(200).json(foundPost)
+   } catch (err) {
       res.status(500).json(err)
    }
 })
@@ -38,8 +38,8 @@ posts.get('/:id', async (req, res) => {
 posts.put('/:id', async (req, res) => {
    try {
       await Post.findByIdAndUpdate(req.params.id, req.body)
-      res.status(200).json({message: 'UPDATED'})
-   } catch (err){
+      res.status(200).json({ message: 'UPDATED' })
+   } catch (err) {
       res.status(500).json(err)
    }
 })
@@ -48,8 +48,8 @@ posts.put('/:id', async (req, res) => {
 posts.delete('/:id', async (req, res) => {
    try {
       await Post.findByIdAndDelete(req.params.id)
-      res.status(200).json({message: 'DELETED'})
-   } catch (err){
+      res.status(200).json({ message: 'DELETED' })
+   } catch (err) {
       res.status(500).json(err)
    }
 })
