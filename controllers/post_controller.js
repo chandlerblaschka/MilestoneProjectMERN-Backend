@@ -27,7 +27,7 @@ posts.post('/', async (req, res) => {
 posts.get('/:id', async (req, res) => {
    try {
       const foundPost = await Post.findById(req.params.id)
-         .populate({ path: "comments" })
+         .populate({ path: "comments", options: {sort: {comment_date: -1}}})
       res.status(200).json(foundPost)
    } catch (err) {
       res.status(500).json(err)
