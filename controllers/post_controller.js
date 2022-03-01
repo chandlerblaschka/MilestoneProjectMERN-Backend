@@ -24,10 +24,11 @@ posts.post('/', async (req, res) => {
 })
 
 // SHOW
+//sorting via https://stackoverflow.com/questions/16352768/how-to-sort-a-populated-document-in-find-request
 posts.get('/:id', async (req, res) => {
    try {
       const foundPost = await Post.findById(req.params.id)
-         .populate({ path: "comments", options: {sort: {comment_date: -1}}})
+         .populate({ path: "comments", options: { sort: { comment_date: -1 } } })
       res.status(200).json(foundPost)
    } catch (err) {
       res.status(500).json(err)
